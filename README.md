@@ -1,5 +1,30 @@
 ## **CT Scan Viewer**
 
+A web-based application for visualizing medical CT scan slices in **axial**, **sagittal**, and **coronal** views. The viewer supports interactive navigation through slices, dynamic resizing for responsive displays, and efficient preloading of medical images for a smooth user experience.
+
+---
+
+### **Demo**
+
+
+---
+
+### **Features**
+- **View Modes**:
+  - Axial, sagittal, and coronal views of CT scan slices.
+- **Interactive Navigation**:
+  - Navigate through slices using the mouse scroll.
+  - Switch between views using buttons.
+- **Dynamic Resizing**:
+  - Canvas resizes dynamically to fit any screen size.
+- **Efficient Preloading**:
+  - Preloads images for a smoother user experience.
+
+---
+
+### **Getting Started**
+## **CT Scan Viewer**
+
 A web-based application for visualizing medical CT scan slices in **axial**, **sagittal**, and **coronal** views. The viewer supports interactive navigation through slices, dynamic resizing for responsive displays, and efficient preloading of medical images for a smooth user experience. Ideal for researchers and medical professionals working with NIfTI files.
 
 ---
@@ -17,6 +42,18 @@ A web-based application for visualizing medical CT scan slices in **axial**, **s
 
 ---
 
+### **Demo**
+
+<div>
+    <a href="https://www.loom.com/share/3b9c65b9edcb4534975aea915e06f72e">
+      <p>CT Scan Viewer Demo</p>
+    </a>
+    <a href="https://www.loom.com/share/3b9c65b9edcb4534975aea915e06f72e">
+      <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/3b9c65b9edcb4534975aea915e06f72e-0699934b0a07d77b-full-play.gif">
+    </a>
+  </div>
+---
+
 ### **Getting Started**
 
 #### **Prerequisites**
@@ -30,11 +67,24 @@ A web-based application for visualizing medical CT scan slices in **axial**, **s
    git clone https://github.com/sshi10/nifti-viewer.git
    cd nifti-viewer
    ```
-2. Install dependencies:
+2. Create a virtual environment:
+   ```bash
+   python3 -m venv venv
+   ```
+3. Activate the virtual environment:
+   - **On macOS/Linux**:
+     ```bash
+     source venv/bin/activate
+     ```
+   - **On Windows**:
+     ```bash
+     venv\Scripts\activate
+     ```
+4. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
-3. Place your NIfTI file (`.nii` or `.nii.gz`) in the `data/` directory.
+5. Place your NIfTI file (`.nii` or `.nii.gz`) in the `data/` directory.
 
 #### **Running the Application**
 1. Start the Flask server:

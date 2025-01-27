@@ -51,4 +51,4 @@ def view_image(view, slice_index):
     return send_file(buf, mimetype='image/png')
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8000)
+    app.run(host='localhost', port=8000)
