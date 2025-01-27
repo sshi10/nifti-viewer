@@ -1,0 +1,14 @@
+# Virtual environment
+env/
+venv/
+ENV/
+.venv/
+*.env
+
+# NIfTI data files
+data/*.nii
+data/*.nii.gz
+static/images/
+
+# System files
+.DS_Store

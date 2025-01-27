@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CT Scan Viewer</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: black;
+        }
+        
+        #controls {
+            position: fixed;
+            top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        button {
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #666;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        #slice-info {
+            position: fixed;
+            bottom: 10px;
+            font-size: 18px;
+            color: #fff;
+        }
+
+        canvas {
+            display: block;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Changing views-->
+    <div id="controls">
+        <button onclick="setView('axial')">Axial View</button>
+        <button onclick="setView('sagittal')">Sagittal View</button>
+        <button onclick="setView('coronal')">Coronal View</button>
+    </div>
+
+    <!-- Display canvas-->
+    <canvas id="ct-canvas"></canvas>
+
+    <!-- Slice display-->
+    <div id="slice-info">Slice: 0</div>
+
+    <div id="loading-indicator" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white;">
+        Loading slices...
+    </div>
+
+    <script>
+        let currentView = 'axial';
+        let currentSlice = 0;
+        const maxSlices = {{ max_slices | tojson }};
+        const canvas = document.getElementById('ct-canvas');
+        const ctx = canvas.getContext('2d');
+        const sliceInfo = document.getElementById('slice-info');
+
+        // Cache to store preloaded images
+        const sliceCache = {
+            axial: [],
+            sagittal: [],
+            coronal: []
+        };
+
+        // Object to track the current slice for each view
+        const currentSlices = {
+            axial: 0,
+            sagittal: 0,
+            coronal: 0
+        };
+
+        let isPreloading = false;
+
+        // Function to preload all slices for the current view
+        async function preloadSlices() {
+            console.log("Starting to preload slices...");
+            const loadingIndicator = document.getElementById('loading-indicator');
+            loadingIndicator.style.display = 'block';
+
+            for (const view of ['axial', 'sagittal', 'coronal']) {
+                sliceCache[view] = [];
+                for (let i = 0; i < maxSlices[view]; i++) {
+                    try {
+                        const response = await fetch(`/view/${view}/${i}`);
+                        if (!response.ok) {
+                            console.error(`Failed to fetch slice ${i} for view ${view}`);
+                            continue;
+                        }
+                        const blob = await response.blob();
+                        const img = new Image();
+                        img.src = URL.createObjectURL(blob);
+                        await new Promise((resolve) => (img.onload = resolve));
+                        sliceCache[view][i] = img;
+                        console.log(`Preloaded slice ${i} for ${view}`);
+                    } catch (error) {
+                        console.error(`Error preloading slice ${i} for ${view}:`, error);
+                    }
+                }
+            }
+
+            loadingIndicator.style.display = 'none';
+            console.log("Preloading complete");
+        }
+
+        function drawSliceFromCache() {
+            const currentSlice = currentSlices[currentView];
+            const img = sliceCache[currentView][currentSlice];
+
+            if (img) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                const maintainAspectRatio = false; // Set to true if you want to maintain the aspect ratio
+
+                if (maintainAspectRatio) {
+                    // Calculate scaling to fit the image within the canvas while maintaining the aspect ratio
+                    const scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+                    const imgWidth = img.width * scale;
+                    const imgHeight = img.height * scale;
+
+                    // Center the image on the canvas
+                    const xOffset = (canvas.width - imgWidth) / 2;
+                    const yOffset = (canvas.height - imgHeight) / 2;
+
+                    ctx.drawImage(img, 0, 0, img.width, img.height, xOffset, yOffset, imgWidth, imgHeight);
+                } else {
+                    // Stretch the image to fill the entire canvas
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                }
+
+                sliceInfo.textContent = `Slice: ${currentSlice + 1} / ${maxSlices[currentView]}`;
+            } else {
+                console.warn(`No image found in cache for ${currentView} slice ${currentSlice}`);
+            }
+        }
+
+        // Adjust the canvas size to fit the screen while preserving aspect ratio
+        function fitCanvasToScreen() {
+            // Match the canvas size to the window size
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight - 100;
+
+            // Redraw the current slice to fit the resized canvas
+            drawSliceFromCache();
+        }
+
+        // Function to set the view and preload slices
+        function setView(view) {
+            currentView = view;
+            fitCanvasToScreen();
+            drawSliceFromCache();
+        }
+
+        // Scroll to change the slice index with bounds checking
+        function handleScroll(event) {
+            event.preventDefault();
+            if (event.deltaY > 0 && currentSlices[currentView] < maxSlices[currentView] - 1) {
+                currentSlices[currentView]++;
+            } else if (event.deltaY < 0 && currentSlices[currentView] > 0) {
+                currentSlices[currentView]--;
+            }
+            drawSliceFromCache();
+        }
+        
+        // Add the scroll event listener with debouncing
+        document.addEventListener('wheel', handleScroll); // debounce(handleScroll, 3)
+        window.addEventListener('resize', fitCanvasToScreen);
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowUp' && currentSlices[currentView] > 0) {
+                currentSlices[currentView]--;
+                drawSliceFromCache();
+            } else if (event.key === 'ArrowDown' && currentSlices[currentView] < maxSlices[currentView] - 1) {
+                currentSlices[currentView]++;
+                drawSliceFromCache();
+            } else if (event.key === '1') {
+                setView('axial');
+            } else if (event.key === '2') {
+                setView('sagittal');
+            } else if (event.key === '3') {
+                setView('coronal');
+            }
+        });
+
+        window.onload = async () => {
+            await preloadSlices();
+            fitCanvasToScreen();
+            drawSliceFromCache();
+        };
+    </script>
+</body>
+</html>
