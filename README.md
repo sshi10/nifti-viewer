@@ -46,12 +46,12 @@ A web-based application for visualizing medical CT scan slices in **axial**, **s
 
 <div>
     <a href="https://www.loom.com/share/3b9c65b9edcb4534975aea915e06f72e">
-      <p>CT Scan Viewer Demo</p>
     </a>
     <a href="https://www.loom.com/share/3b9c65b9edcb4534975aea915e06f72e">
       <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/3b9c65b9edcb4534975aea915e06f72e-0699934b0a07d77b-full-play.gif">
     </a>
   </div>
+
 ---
 
 ### **Getting Started**
