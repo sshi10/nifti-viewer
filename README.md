@@ -6,44 +6,6 @@ A web-based application for visualizing medical CT scan slices in **axial**, **s
 
 ### **Demo**
 
-
----
-
-### **Features**
-- **View Modes**:
-  - Axial, sagittal, and coronal views of CT scan slices.
-- **Interactive Navigation**:
-  - Navigate through slices using the mouse scroll.
-  - Switch between views using buttons.
-- **Dynamic Resizing**:
-  - Canvas resizes dynamically to fit any screen size.
-- **Efficient Preloading**:
-  - Preloads images for a smoother user experience.
-
----
-
-### **Getting Started**
-## **CT Scan Viewer**
-
-A web-based application for visualizing medical CT scan slices in **axial**, **sagittal**, and **coronal** views. The viewer supports interactive navigation through slices, dynamic resizing for responsive displays, and efficient preloading of medical images for a smooth user experience. Ideal for researchers and medical professionals working with NIfTI files.
-
----
-
-### **Features**
-- **View Modes**:
-  - Axial, sagittal, and coronal views of CT scan slices.
-- **Interactive Navigation**:
-  - Navigate through slices using the mouse scroll or arrow keys.
-  - Switch between views using buttons or keyboard shortcuts.
-- **Dynamic Resizing**:
-  - Canvas resizes dynamically to fit any screen size.
-- **Efficient Preloading**:
-  - Preloads images for a smoother user experience.
-
----
-
-### **Demo**
-
 <div>
     <a href="https://www.loom.com/share/3b9c65b9edcb4534975aea915e06f72e">
     </a>
