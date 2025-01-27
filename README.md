@@ -4,6 +4,16 @@ A web-based application for visualizing medical CT scan slices in **axial**, **s
 
 ---
 
+### **Usage**
+
+#### **Navigation**
+- **Views**:
+  - Switch between **axial**, **sagittal**, and **coronal** views using the buttons.
+- **Slice Scrolling**:
+  - Use the mouse scroll or trackpad to navigate through slices.
+
+---
+
 ### **Demo**
 
 <div>
@@ -57,16 +67,6 @@ A web-based application for visualizing medical CT scan slices in **axial**, **s
    ```
    http://localhost:8000
    ```
-
----
-
-### **Usage**
-
-#### **Navigation**
-- **Views**:
-  - Switch between **axial**, **sagittal**, and **coronal** views using the buttons.
-- **Slice Scrolling**:
-  - Use the mouse scroll or trackpad to navigate through slices.
 
 ---
 
